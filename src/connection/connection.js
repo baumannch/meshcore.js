@@ -649,6 +649,7 @@ class Connection extends EventEmitter {
             data = {
                 batteryMilliVolts: rawBufferReader.readUInt16LE(),
                 uptimeSecs: rawBufferReader.readUInt32LE(),
+                errors: rawBufferReader.readUInt16LE(),
                 queueLen: rawBufferReader.readUInt8(),
             };
         } else if(type === Constants.StatsTypes.Radio){
@@ -1729,6 +1730,8 @@ class Connection extends EventEmitter {
                         last_snr: bufferReader.readInt16LE(), // int16_t last_snr
                         n_direct_dups: bufferReader.readUInt16LE(), // uint16_t n_direct_dups
                         n_flood_dups: bufferReader.readUInt16LE(), // uint16_t n_flood_dups
+                        total_rx_air_time_secs: bufferReader.getRemainingBytesCount() >= 4 ? bufferReader.readUInt32LE() : null,
+                        n_recv_errors: bufferReader.getRemainingBytesCount() >= 4 ? bufferReader.readUInt32LE() : null,
                     }
 
                     resolve(repeaterStats);
